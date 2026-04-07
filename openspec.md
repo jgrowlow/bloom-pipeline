@@ -291,31 +291,48 @@ bloom-pipeline/
 
 ## 8. Build Phases
 
-### Phase 1 — Foundation (start here)
-- [ ] Scaffold project structure
-- [ ] `.env` + credential validation
-- [ ] Airtable reader (`lib/airtable.js`)
-- [ ] Claude API wrapper (`lib/claude.js`)
-- [ ] Brand Agent + prompt
-- [ ] Test Brand Agent with sample intake
+### Phase 1 — Foundation ✅
+- [x] Scaffold project structure
+- [x] `.env` + credential validation
+- [x] Airtable reader (`lib/airtable.js`)
+- [x] Claude API wrapper (`lib/claude.js`)
+- [x] Brand Agent + prompt
+- [x] `fixtures/sample-intake.json`
 
-### Phase 2 — Core Agents
-- [ ] Copy Agent + prompt
-- [ ] SEO Agent + prompt
-- [ ] Structure Agent + prompt
-- [ ] Orchestrator wires all 4 agents
+### Phase 2 — Core Agents ✅
+- [x] Copy Agent + prompt
+- [x] SEO Agent + prompt
+- [x] Structure Agent + prompt
+- [x] Orchestrator wires all agents with checkpointing
 
-### Phase 3 — Publish
-- [ ] Webflow API helper (`lib/webflow.js`)
-- [ ] Publisher Agent
-- [ ] Airtable status write-back
-- [ ] End-to-end test (intake → published site)
+### Phase 3 — Publish ✅
+- [x] Webflow API helper (`lib/webflow.js`)
+- [x] Publisher Agent with idempotency
+- [x] Airtable status write-back
+- [x] HTTP server entry point (`index.js`)
 
-### Phase 4 — Hardening
-- [ ] Error handling + retry logic
-- [ ] WCAG contrast validation for brand colors
-- [ ] Character limit validation for SEO fields
-- [ ] Make.com webhook trigger
+### Phase 4 — Tests (current)
+- [ ] Write integration tests from WHEN/THEN scenarios in `specs/*.md`
+- [ ] Test each agent standalone with `fixtures/sample-intake.json`
+- [ ] Add `plans/requirements.md` and `plans/plan.md`
+- [ ] Add `CLAUDE.md` system prompt
+- [ ] Install marketing skills (`zubair-trabzada/ai-marketing-claude`)
+
+### Phase 5 — Airtable Setup
+- [ ] Build Airtable base with all intake fields
+- [ ] Add checkpoint fields (Brand Output, Copy Output, SEO Output, Structure Output)
+- [ ] Configure Airtable automation → webhook trigger on Pipeline Status = `ready`
+- [ ] Fill in `.env` with real API keys
+
+### Phase 6 — Webflow Setup
+- [ ] Create Webflow site from template
+- [ ] Build CMS Collection with fields matching SiteSpec
+- [ ] Get Webflow Site ID + Collection ID → add to `.env`
+
+### Phase 7 — End-to-End
+- [ ] Run full pipeline against real Airtable record
+- [ ] Verify published Webflow site
+- [ ] Webflow site handoff flow tested
 
 ---
 
@@ -369,7 +386,7 @@ Brand Agent outputs colors in **HSL by default**. Hex with separate opacity decl
 
 ---
 
-## 10. Edge Cases
+## 11. Edge Cases
 
 ### Human-in-the-Loop Trigger
 - Client fills intake form
