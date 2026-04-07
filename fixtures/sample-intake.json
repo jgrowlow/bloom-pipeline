@@ -1,0 +1,22 @@
+{
+  "id": "recSAMPLE0000001",
+  "fields": {
+    "Business Name": "Verdant Wellness Studio",
+    "Industry": "Health & Wellness",
+    "Target Audience": "Women aged 28–45 in urban areas who are burnt out and looking for holistic, science-backed approaches to stress recovery and nervous system regulation. They've tried yoga apps and gym memberships but want something more personal and results-oriented.",
+    "Services (1-5)": "1. Somatic Therapy Sessions — 1:1 sessions that use body-based techniques to release stored stress and trauma\n2. Breathwork Intensives — guided group experiences for rapid nervous system reset\n3. Corporate Wellness Workshops — half-day programs for teams dealing with burnout\n4. 12-Week Nervous System Reset Program — structured online program with weekly coaching calls\n5. Retreat Days — full-day immersive wellness experiences at partner venues",
+    "USP": "We combine evidence-based somatic therapy with practical nervous system science — no crystals, no toxic positivity. Just real tools that work. Our clients average a 60% reduction in self-reported stress scores within 8 weeks.",
+    "Brand Tone": ["Warm", "Grounded", "Expert", "Calm"],
+    "Competitors": "The Mindfulness App, Headspace, local yoga studios, traditional therapists",
+    "Has Testimonials": true,
+    "Has Portfolio": false,
+    "Primary CTA Goal": "Book",
+    "Pipeline Status": "ready",
+    "Webflow Item IDs": "",
+    "Error Log": "",
+    "Brand Output": "",
+    "Copy Output": "",
+    "SEO Output": "",
+    "Structure Output": ""
+  }
+}
