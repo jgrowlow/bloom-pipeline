@@ -80,7 +80,8 @@ Airtable Intake Form
 **Constraints:**
 - Colors must be WCAG AA compliant (contrast ratio ≥ 4.5:1)
 - Fonts must be available in Google Fonts OR Webflow's built-in library
-- Return hex codes only, no color names
+- Return colors as hex OR HSL only — no color names (HSL preferred for opacity/lightness flexibility in CSS)
+- Validate color format before passing to next agent — fail fast with descriptive error if invalid
 
 ---
 
@@ -249,7 +250,7 @@ Store in `.env` — never commit to repo.
 | Layer | Tool |
 |---|---|
 | Intake | Airtable (form + base) |
-| Trigger | Make.com webhook OR cron poll |
+| Trigger | Airtable native automation → webhook on Pipeline Status = ready |
 | Agent Runtime | Claude Code (Node.js) |
 | LLM | Claude claude-sonnet-4-20250514 via Anthropic API |
 | CMS Publish | Webflow REST API v2 |
@@ -281,6 +282,8 @@ bloom-pipeline/
 │   ├── copy.md
 │   ├── seo.md
 │   └── structure.md
+├── fixtures/
+│   └── sample-intake.json    # Test data for standalone agent runs
 └── index.js              # Entry point (trigger handler)
 ```
 
@@ -316,7 +319,48 @@ bloom-pipeline/
 
 ---
 
-## 9. Success Criteria
+## 9. Non-Functional Requirements
+
+### Checkpointing
+Each agent writes its output to Airtable immediately after it completes. If the pipeline fails at SEO, re-run resumes from that checkpoint — Brand and Copy are not regenerated. Add checkpoint fields to Airtable: `Brand Output`, `Copy Output`, `SEO Output`, `Structure Output` (Long Text, JSON).
+
+### Validation at Every Handoff
+`lib/validate.js` runs after every agent, before output is passed to the next agent. Fail fast with a descriptive error: e.g. `BrandSpec validation failed: primary_color is not a valid HSL or hex value`. Never let a malformed output silently cascade downstream.
+
+### LLM Retry on Constraint Failure
+For fields with hard constraints (SEO character limits, color format, WCAG compliance), if validation fails, retry the agent once with a corrective prompt before halting. Example: `Your previous response returned a color name instead of HSL. Return only valid HSL values.`
+
+### Idempotency in Publisher
+Before creating CMS items, check if `Webflow Item IDs` is already populated in Airtable for this record. If yes, skip creation and go straight to publish. Prevents duplicate CMS items on re-run.
+
+### Observability
+Error Log field in Airtable must capture: which agent failed, the error message, and a truncated version of the input that caused it. `failed` alone is not enough.
+
+### Prompt Versioning
+Each file in `prompts/*.md` must include a version header:
+```
+## v1.0 — 2026-04-06
+```
+Update the version and date on every prompt change.
+
+### Test Fixtures
+Commit `fixtures/sample-intake.json` with a realistic intake record. Every agent must be runnable standalone:
+```bash
+node agents/brand.js fixtures/sample-intake.json
+```
+
+### Trigger
+Airtable native automation — trigger on Pipeline Status changing to `ready`, send webhook to pipeline endpoint. Make.com removed as ambiguous option. Pick one trigger mechanism only.
+
+### Font Whitelist
+Hardcoded whitelist in `lib/validate.js` must include a comment with last-verified date and Webflow docs URL. Review when Webflow releases major updates.
+
+### Color Format
+Brand Agent outputs colors in **HSL by default**. Hex with separate opacity declaration also accepted (e.g. `#FFFFFF 10%`). No color names. No RGB. Validated at handoff.
+
+---
+
+## 10. Success Criteria
 
 - Given a complete Airtable intake record, the pipeline produces a published Webflow site with no manual intervention
 - All output fields pass their constraint checks before publish
